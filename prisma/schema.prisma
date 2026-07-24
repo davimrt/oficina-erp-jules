@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Customer {
+  id           String         @id @default(uuid())
+  name         String
+  phone        String
+  notes        String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  vehicles     Vehicle[]
+  serviceOrders ServiceOrder[]
+}
+
+model Vehicle {
+  id           String         @id @default(uuid())
+  licensePlate String         @unique
+  manufacturer String
+  model        String
+  year         Int?
+  customerId   String
+  customer     Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  serviceOrders ServiceOrder[]
+}
+
+model Mechanic {
+  id           String         @id @default(uuid())
+  name         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  serviceOrders ServiceOrder[]
+}
+
+model ServiceOrder {
+  id               String             @id @default(uuid())
+  osNumber         String             @unique // Custom generated formatted string or unique ID
+  customerComplaint String
+  internalDiagnosis String?
+  laborPrice       Float              @default(0.0)
+  partsPrice       Float              @default(0.0)
+  totalPrice       Float              @default(0.0)
+  status           String             // "NEW", "DIAGNOSING", "WAITING_FOR_APPROVAL", "APPROVED", "IN_PROGRESS", "READY", "DELIVERED"
+
+  customerId       String
+  customer         Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  vehicleId        String
+  vehicle          Vehicle            @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  mechanicId       String?
+  mechanic         Mechanic?          @relation(fields: [mechanicId], references: [id], onDelete: SetNull)
+
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  services         ServiceOrderItem[]
+  parts            PartItem[]
+  statusHistory    StatusHistory[]
+}
+
+model ServiceOrderItem {
+  id             String       @id @default(uuid())
+  serviceOrderId String
+  serviceOrder   ServiceOrder @relation(fields: [serviceOrderId], references: [id], onDelete: Cascade)
+  description    String
+  price          Float
+  createdAt      DateTime     @default(now())
+}
+
+model PartItem {
+  id             String       @id @default(uuid())
+  serviceOrderId String
+  serviceOrder   ServiceOrder @relation(fields: [serviceOrderId], references: [id], onDelete: Cascade)
+  name           String
+  quantity       Int          @default(1)
+  price          Float
+  createdAt      DateTime     @default(now())
+}
+
+model StatusHistory {
+  id             String       @id @default(uuid())
+  serviceOrderId String
+  serviceOrder   ServiceOrder @relation(fields: [serviceOrderId], references: [id], onDelete: Cascade)
+  fromStatus     String?
+  toStatus       String
+  changedAt      DateTime     @default(now())
+  notes          String?
+}
