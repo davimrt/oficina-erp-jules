@@ -1,212 +1,119 @@
-# Oficina ERP
+# Oficina ERP - MVP Sistema de Gestão de Oficina Mecânica
 
-MVP de um sistema simples de gestão para oficinas mecânicas, desenvolvido para testar a capacidade do Google Jules em criar e evoluir uma aplicação web completa.
+Este é um MVP funcional de um sistema de gestão simples, limpo e intuitivo para oficinas mecânicas de pequeno porte. Ele foi desenvolvido com foco total na rapidez operacional: um mecânico consegue abrir uma nova Ordem de Serviço em **menos de um minuto** usando o celular.
 
-O objetivo principal é permitir que uma oficina pequena registre clientes, veículos e ordens de serviço com o mínimo de etapas possível. A abertura de uma nova ordem de serviço deve levar menos de um minuto e funcionar bem tanto no computador quanto no celular.
+## 🚀 Tecnologias Utilizadas
 
-## Objetivos do projeto
+* **Next.js 16 (App Router)** com Turbopack e TypeScript.
+* **Tailwind CSS v4** para uma interface limpa, ultra-responsiva e adaptada para celulares.
+* **Prisma ORM v7** para modelagem de banco de dados e controle seguro de tipos.
+* **SQLite** como banco de dados local leve.
+* **Jest + ts-jest** para testes unitários automatizados rápidos e eficientes.
+* **Lucide React** para iconografia moderna.
 
-* Simplificar a abertura de ordens de serviço.
-* Evitar telas complexas e campos desnecessários.
-* Centralizar clientes, veículos e serviços realizados.
-* Permitir o acompanhamento rápido do andamento de cada veículo.
-* Criar uma base que possa evoluir posteriormente para estoque, financeiro, WhatsApp e outras integrações.
+---
 
-## Escopo inicial
+## 🛠️ Instalação e Configuração
 
-O MVP deve incluir:
+Siga os passos abaixo para configurar o ambiente localmente:
 
-### Dashboard
+### 1. Instalar as dependências
 
-Visão resumida da operação da oficina, mostrando:
-
-* Ordens de serviço abertas.
-* Veículos aguardando diagnóstico.
-* Serviços em andamento.
-* Veículos prontos para entrega.
-
-### Clientes
-
-Cadastro simples com:
-
-* Nome.
-* Telefone.
-* Observações opcionais.
-
-O sistema deve permitir criar, editar, visualizar e excluir clientes.
-
-### Veículos
-
-Cadastro com:
-
-* Placa.
-* Marca.
-* Modelo.
-* Ano opcional.
-* Cliente vinculado.
-
-O sistema deve permitir criar, editar, visualizar e excluir veículos.
-
-### Abertura rápida de ordem de serviço
-
-A criação de uma nova ordem de serviço deve ser simples, rápida e adequada para uso em celular.
-
-Campos principais:
-
-* Cliente ou telefone.
-* Placa do veículo.
-* Problema relatado pelo cliente.
-* Mecânico responsável, opcional.
-* Status inicial.
-
-O problema relatado pelo cliente deve ser o campo de maior destaque da tela.
-
-### Gestão de ordens de serviço
-
-Cada ordem de serviço deve permitir registrar:
-
-* Problema relatado pelo cliente.
-* Diagnóstico interno.
-* Serviços realizados.
-* Peças utilizadas.
-* Valor da mão de obra.
-* Valor das peças.
-* Valor total calculado automaticamente.
-* Mecânico responsável.
-* Histórico de alterações de status.
-
-Status previstos:
-
-* Nova.
-* Em diagnóstico.
-* Aguardando aprovação.
-* Aprovada.
-* Em execução.
-* Pronta.
-* Entregue.
-
-## Stack sugerida
-
-* Next.js.
-* TypeScript.
-* App Router.
-* Tailwind CSS.
-* Prisma ORM.
-* SQLite para desenvolvimento local.
-
-## Requisitos de experiência de uso
-
-* Interface responsiva.
-* Fluxos curtos e objetivos.
-* Textos e botões em português do Brasil.
-* Boa utilização em smartphones.
-* Poucos campos obrigatórios.
-* Navegação clara para usuários com pouca familiaridade com computadores.
-* Evitar aparência e comportamento de um ERP tradicional complexo.
-
-## Requisitos técnicos
-
-* Código organizado e tipado.
-* Validação dos campos principais.
-* Tratamento básico de erros.
-* Banco de dados com relacionamentos consistentes.
-* Dados demonstrativos para testes.
-* Testes automatizados das principais regras de negócio.
-* Verificação de lint e build de produção.
-* Instruções claras de instalação e execução.
-
-## Estrutura de dados esperada
-
-O projeto deve possuir, no mínimo, as seguintes entidades:
-
-* Customer.
-* Vehicle.
-* Mechanic.
-* ServiceOrder.
-* ServiceOrderItem.
-* PartItem.
-* StatusHistory.
-
-Os nomes internos podem permanecer em inglês, mas toda a interface apresentada ao usuário deve estar em português do Brasil.
-
-## Regras importantes
-
-* Um cliente pode possuir vários veículos.
-* Um veículo pertence a um cliente.
-* Uma ordem de serviço pertence a um veículo e a um cliente.
-* O mecânico responsável pode ser definido posteriormente.
-* O valor total da ordem deve ser a soma da mão de obra com as peças.
-* Toda mudança de status deve registrar data e hora.
-* Uma ordem entregue não deve aparecer entre os serviços ativos do dashboard.
-
-## Dados de demonstração
-
-Criar dados iniciais suficientes para testar imediatamente:
-
-* Clientes fictícios.
-* Veículos vinculados.
-* Mecânicos.
-* Ordens de serviço em diferentes status.
-* Serviços e peças de exemplo.
-
-## Critérios de conclusão
-
-O MVP será considerado funcional quando for possível:
-
-1. Cadastrar um cliente.
-2. Vincular um veículo ao cliente.
-3. Criar uma ordem de serviço rapidamente.
-4. Registrar diagnóstico, serviços e peças.
-5. Alterar o status da ordem.
-6. Consultar o histórico de status.
-7. Visualizar os indicadores no dashboard.
-8. Executar o projeto localmente sem erros.
-9. Executar os testes automatizados.
-10. Gerar o build de produção com sucesso.
-
-## Comandos esperados
-
-Depois da implementação, o projeto deve possuir comandos equivalentes a:
+Certifique-se de que possui o Node.js instalado (v18 ou superior recomendado). Na raiz do projeto, execute:
 
 ```bash
 npm install
+```
+
+### 2. Criar o Banco de Dados e Aplicar Migrações
+
+Crie o arquivo SQLite local e aplique a estrutura das tabelas executando:
+
+```bash
 npm run db:migrate
+```
+
+### 3. Popular com Dados de Demonstração (Seed)
+
+Popule o banco de dados imediatamente com dados fictícios prontos para testes rápidos (clientes, veículos, mecânicos e ordens de serviço em diversos status):
+
+```bash
 npm run db:seed
+```
+
+---
+
+## 💻 Executando o Projeto
+
+### Rodar em modo de desenvolvimento
+
+Inicie o servidor de desenvolvimento local:
+
+```bash
 npm run dev
+```
+
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador ou acesse pelo celular na mesma rede local.
+
+---
+
+## 🧪 Testes Automatizados e Qualidade
+
+O sistema possui uma suíte de testes focada nas principais regras de negócio (cálculos financeiros, validações de duplicidade de placas, criação rápida de clientes e vínculos).
+
+### Executar testes automatizados
+
+```bash
 npm run test
+```
+
+### Executar o Linter de código
+
+```bash
 npm run lint
+```
+
+### Gerar Build de Produção
+
+Para testar a compilação final otimizada para produção:
+
+```bash
 npm run build
 ```
 
-Os nomes exatos podem variar, mas devem estar documentados no README final do projeto.
+---
 
-## Fora do escopo deste primeiro MVP
+## 🌟 Funcionalidades Implementadas
 
-Não implementar nesta primeira versão:
+1. **Painel Geral (Dashboard)**:
+   * Métricas em tempo real de: *Ordens de Serviço Ativas*, *Aguardando Diagnóstico*, *Serviços em Execução* e *Prontos para Entrega*.
+   * Listas detalhadas de veículos em cada etapa, facilitando a visualização rápida pelo proprietário da oficina.
 
-* Integração com WhatsApp.
-* Processamento de áudio.
-* Reconhecimento de imagens.
-* Emissão de nota fiscal.
-* Pagamentos online.
-* Controle financeiro completo.
-* Controle avançado de estoque.
-* Multiempresa.
-* Controle detalhado de permissões.
+2. **Abertura Rápida de OS (Modo Mobile)**:
+   * Formulado especificamente para celulares (botões grandes e fáceis de tocar).
+   * Campo de "Queixa do Cliente" com maior destaque na tela.
+   * Autocomplete instantâneo para clientes e placas existentes.
+   * **Criação Automática**: Caso digite um cliente ou placa inexistente, o sistema cria o cadastro do cliente e do veículo automaticamente em segundo plano.
 
-Esses recursos poderão ser avaliados após a validação do núcleo de ordens de serviço.
+3. **Gestão de Ordens de Serviço**:
+   * Descrição de diagnóstico interno e atribuição de mecânico.
+   * Adicionar e remover itemizado de **Serviços Prestados** e **Peças Utilizadas**.
+   * **Cálculo Financeiro Automático**: Atualização automática e segura do preço total somando mão de obra e peças.
+   * **Histórico de Status**: Registro automático com carimbo de data e hora para cada alteração de status (Nova, Em Diagnóstico, Aguardando Aprovação, Aprovada, Em Execução, Pronta, Entregue).
 
-## Instrução para o agente de desenvolvimento
+4. **Cadastro de Clientes**:
+   * CRUD completo (Criar, Visualizar, Editar e Excluir) de clientes com Notas Internas.
 
-Antes de iniciar a implementação:
+5. **Cadastro de Veículos**:
+   * CRUD completo vinculado aos clientes com placa no padrão Mercosul/tradicional.
 
-1. Analise o repositório.
-2. Apresente um plano curto de desenvolvimento.
-3. Defina a estrutura técnica proposta.
-4. Implemente o sistema por etapas.
-5. Execute migrações, testes, lint e build.
-6. Corrija os erros encontrados.
-7. Verifique visualmente as principais telas.
-8. Documente as decisões e os comandos necessários.
+---
 
-O foco deve permanecer na simplicidade operacional da oficina, especialmente na abertura rápida de uma nova ordem de serviço.
+## 📂 Estrutura de Pastas Técnica
+
+* `prisma/schema.prisma` - Definição dos modelos de dados (Customer, Vehicle, Mechanic, ServiceOrder, etc.).
+* `prisma/seed.ts` - Script para popular dados iniciais.
+* `src/app/actions/` - Server Actions contendo todas as regras de negócio de backend seguras contra injeção de dados.
+* `src/app/` - Estrutura de rotas do Next.js App Router (Páginas, formulários e layouts).
+* `src/__tests__/` - Testes automatizados escritos em Jest.
+* `src/lib/prisma.ts` - Instanciação e adaptadores para o Prisma Client local.
